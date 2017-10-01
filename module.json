@@ -1,0 +1,16 @@
+{
+    "name": "Location",
+    "alias": "location",
+    "version": "1.0.0",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 100,
+    "providers": [
+        "Modules\\Location\\Providers\\LocationServiceProvider",
+        "Modules\\Location\\Providers\\RouteServiceProvider"
+    ],
+    "aliases": [],
+    "files": [],
+    "requires": []
+}
