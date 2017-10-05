@@ -18,7 +18,7 @@ class RegisterLocationSidebar extends AbstractAdminSidebar
         $menu->group(trans('core::sidebar.content'), function (Group $group) {
             $group->item(trans('location::locations.title.locations'), function (Item $item) {
                 $item->icon('fa fa-map-marker');
-                $item->weight(0);
+                $item->weight(30);
                 $item->append('admin.location.location.create');
                 $item->route('admin.location.location.index');
                 $item->authorize(
