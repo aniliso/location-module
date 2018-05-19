@@ -97,9 +97,9 @@
 
                     {!! Form::normalInput('email', trans('location::locations.form.email'), $errors) !!}
 
-                    {!! Form::normalInput('ordering', trans('portfolio::brands.form.ordering'), $errors) !!}
+                    {!! Form::normalInput('ordering', trans('location::locations.form.ordering'), $errors) !!}
 
-                    {!! Form::normalCheckbox('status', trans('portfolio::brands.form.status'), $errors) !!}
+                    {!! Form::normalCheckbox('status', trans('location::locations.form.status'), $errors) !!}
                 </div>
             </div>
         </div>
@@ -170,6 +170,11 @@
                 this.getCities(this.countryId);
             },
             mounted() {
+                let t = setInterval(() => {
+                    if (document.readyState === 'complete') {
+                        clearInterval(t);
+                    }
+                }, 500);
                 this.createGoogleMaps()
                     .then(this.initGoogleMaps, this.googleMapsFailedToLoad);
             },
