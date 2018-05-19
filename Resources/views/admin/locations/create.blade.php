@@ -5,8 +5,11 @@
         {{ trans('location::locations.title.create location') }}
     </h1>
     <ol class="breadcrumb">
-        <li><a href="{{ route('dashboard.index') }}"><i class="fa fa-dashboard"></i> {{ trans('core::core.breadcrumb.home') }}</a></li>
-        <li><a href="{{ route('admin.location.location.index') }}">{{ trans('location::locations.title.locations') }}</a></li>
+        <li><a href="{{ route('dashboard.index') }}"><i
+                        class="fa fa-dashboard"></i> {{ trans('core::core.breadcrumb.home') }}</a></li>
+        <li>
+            <a href="{{ route('admin.location.location.index') }}">{{ trans('location::locations.title.locations') }}</a>
+        </li>
         <li class="active">{{ trans('location::locations.title.create location') }}</li>
     </ol>
 @stop
@@ -34,24 +37,25 @@
                 <div class="box-body">
                     <div class="row">
                         <div class="col-md-9">
-                            {!! Form::normalInput('address', trans('location::locations.form.address'), $errors, null, ['id'=>'address']) !!}
+                            {!! Form::normalInput('address', trans('location::locations.form.address'), $errors, old('address'), ['id'=>'address', 'v-model'=>'address','@change'=>'findAddress']) !!}
                         </div>
                         <div class="col-md-3">
-                            {!! Form::normalInput('postcode', trans('location::locations.form.postcode'), $errors) !!}
+                            {!! Form::normalInput('postcode', trans('location::locations.form.postcode'), $errors, old('postcode')) !!}
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            {!! Form::normalInput('lat', trans('location::locations.form.lat'), $errors, null, ['id'=>'lat']) !!}
+                            {!! Form::normalInput('lat', trans('location::locations.form.lat'), $errors, old('lat'), ['id'=>'lat', 'v-model'=>'lat']) !!}
                         </div>
                         <div class="col-md-3">
-                            {!! Form::normalInput('long', trans('location::locations.form.long'), $errors, null, ['id'=>'long']) !!}
+                            {!! Form::normalInput('long', trans('location::locations.form.long'), $errors, old('long'), ['id'=>'long', 'v-model'=>'long']) !!}
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 {!! Form::label("city_id", trans('location::locations.form.city_id')) !!}
-                                <select name="city_id" class="form-control">
-                                    <option value="" selected>{!! trans("location::locations.form.select city") !!}</option>
+                                <select name="city_id" class="form-control" v-model="cityId">
+                                    <option value=""
+                                            selected>{!! trans("location::locations.form.select city") !!}</option>
                                     <option v-for="(item, key) in cities" v-bind:value="key">@{{ item}}</option>
                                 </select>
                             </div>
@@ -59,8 +63,10 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 {!! Form::label("country_id", trans('location::locations.form.country_id')) !!}
-                                <select name="country_id" class="form-control" v-on:change="onChange" v-model="countryId">
-                                    <option value="" selected>{!! trans("location::locations.form.select country") !!}</option>
+                                <select name="country_id" class="form-control" v-on:change="onChange"
+                                        v-model="countryId">
+                                    <option value=""
+                                            selected>{!! trans("location::locations.form.select country") !!}</option>
                                     <option v-for="(item, key) in countries" v-bind:value="key">@{{ item}}</option>
                                 </select>
                                 {!! $errors->first("country_id", '<span class="help-block">:message</span>') !!}
@@ -72,8 +78,10 @@
             </div>
             <div class="box-footer">
                 <button type="submit" class="btn btn-primary btn-flat">{{ trans('core::core.button.create') }}</button>
-                <button class="btn btn-default btn-flat" name="button" type="reset">{{ trans('core::core.button.reset') }}</button>
-                <a class="btn btn-danger pull-right btn-flat" href="{{ route('admin.location.location.index')}}"><i class="fa fa-times"></i> {{ trans('core::core.button.cancel') }}</a>
+                <button class="btn btn-default btn-flat" name="button"
+                        type="reset">{{ trans('core::core.button.reset') }}</button>
+                <a class="btn btn-danger pull-right btn-flat" href="{{ route('admin.location.location.index')}}"><i
+                            class="fa fa-times"></i> {{ trans('core::core.button.cancel') }}</a>
             </div>
         </div>
         <div class="col-md-3">
@@ -110,120 +118,135 @@
 @stop
 
 @push('js-stack')
-<style>
-    #map {
-        height: 400px;
-        width: 100%;
-    }
-</style>
-<script>
-    var initMap = function () {
-        var default_address = 'Ankara, Türkiye';
-        var geocoder = new google.maps.Geocoder();
-        var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 16
-        });
-        var marker = new google.maps.Marker({
-            map: map
-        });
-        geocoder.geocode({'address': default_address}, function (results, status) {
-            if (status === 'OK') {
-                map.setCenter(results[0].geometry.location);
-                marker.setPosition(results[0].geometry.location);
-                document.getElementById('lat').value = results[0].geometry.location.lat();
-                document.getElementById('long').value = results[0].geometry.location.lng();
-            }
-        });
-        google.maps.event.addListener(map, 'click', function(args) {
-            marker.setPosition(args.latLng);
-            document.getElementById('lat').value = args.latLng.lat();
-            document.getElementById('long').value = args.latLng.lng();
-        });
-        $('#address').on('keyup', function() {
-            geocodeAddress(geocoder, map, marker);
-        });
-    }
-    function geocodeAddress(geocoder, resultsMap, marker) {
-        var address = document.getElementById('address').value;
-        geocoder.geocode({'address': address}, function (results, status) {
-            if (status === 'OK') {
-                resultsMap.setCenter(results[0].geometry.location);
-                marker.setPosition(results[0].geometry.location);
-                document.getElementById('lat').value = results[0].geometry.location.lat();
-                document.getElementById('long').value = results[0].geometry.location.lng();
-            }
-        });
-    }
-</script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpvcV4WyemrP7OUfrDuXTkEaazIzwqe1U&callback=initMap"></script>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
 @endpush
 
 @push('js-stack')
-<script type="text/javascript">
-    $(document).ready(function () {
-        $(document).keypressAction({
-            actions: [
-                {key: 'b', route: "<?= route('admin.location.location.index') ?>"}
-            ]
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(document).keypressAction({
+                actions: [
+                    {key: 'b', route: "<?= route('admin.location.location.index') ?>"}
+                ]
+            });
         });
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        $('input[type="checkbox"].flat-blue, input[type="radio"].flat-blue').iCheck({
-            checkboxClass: 'icheckbox_flat-blue',
-            radioClass: 'iradio_flat-blue'
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('input[type="checkbox"].flat-blue, input[type="radio"].flat-blue').iCheck({
+                checkboxClass: 'icheckbox_flat-blue',
+                radioClass: 'iradio_flat-blue'
+            });
         });
-    });
-</script>
-<script src="https://unpkg.com/vue"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script>
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="token"]').getAttribute('content');
-    axios.defaults.headers.common['Authorization'] = AuthorizationHeaderValue;
-    Vue.config.debug = true;
-    Vue.config.devtools = true;
-    var app = new Vue({
-        el: '#app',
-        data: {
-            loading: false,
-            countries: [],
-            cities: [],
-            countryId: 1
-        },
-        created: function () {
-            this.getCountries();
-            this.getCities(this.countryId);
-        },
-        methods: {
-            getCountries: function () {
-                this.loading = true;
-                axios.get("{{ route('api.localization.countries') }}")
-                        .then(response => {
-                    this.countries = response.data.data;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-                this.loading = false;
+    </script>
+    <script src="{!! Module::asset('location:js/vue.js') !!}"></script>
+    <script src="{!! Module::asset('location:js/axios.min.js') !!}"></script>
+    <script>
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="token"]').getAttribute('content');
+        axios.defaults.headers.common['Authorization'] = AuthorizationHeaderValue;
+        Vue.config.debug = true;
+        Vue.config.devtools = true;
+        new Vue({
+            el: '#app',
+            data: {
+                loading: false,
+                countries: ['turkey'],
+                cities: [],
+                countryId: 1,
+                cityId: 6,
+                address: '{{ old('address') }}',
+                cityName: '',
+                countryName: '',
+                lat: '{{ old('lat') }}',
+                long: '{{ old('long') }}'
             },
-            getCities: function (city_id) {
-                axios.get("{{ route('api.localization.cities') }}?id=" + city_id)
-                        .then(response => {
-                    this.cities = response.data.data;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+            created() {
+                this.getCountries();
+                this.getCities(this.countryId);
             },
-            onChange: function () {
-                if (this.countryId) {
-                    this.getCities(this.countryId);
-                } else {
-                    this.cities = [];
+            mounted() {
+                this.createGoogleMaps()
+                    .then(this.initGoogleMaps, this.googleMapsFailedToLoad);
+            },
+            methods: {
+                getCountries: function () {
+                    this.loading = true;
+                    axios.get("{{ route('api.localization.countries') }}")
+                        .then(response => {
+                            this.countries = response.data.data;
+                            this.countryName = this.countries[this.countryId];
+                            this.findAddress();
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                    this.loading = false;
+                },
+                getCities: function (city_id) {
+                    axios.get("{{ route('api.localization.cities') }}?id=" + city_id)
+                        .then(response => {
+                            this.cities = response.data.data;
+                            this.cityName = this.cities[this.cityId];
+                            this.findAddress();
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                onChange: function () {
+                    if (this.countryId) {
+                        this.getCities(this.countryId);
+                    } else {
+                        this.cities = [];
+                    }
+                },
+                createGoogleMaps: function () {
+                    return new Promise((resolve, reject) => {
+                        let gmap = document.createElement('script');
+                        gmap.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBpvcV4WyemrP7OUfrDuXTkEaazIzwqe1U`;
+                        gmap.type = 'text/javascript';
+                        gmap.onload = resolve;
+                        gmap.onerror = reject;
+                        gmap.async = true;
+                        gmap.defer = true;
+                        document.body.appendChild(gmap);
+                    })
+                },
+                initGoogleMaps: function () {
+                    this.vueGMap = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 16
+                    });
+                    this.findAddress();
+                },
+                getMarker: function (map) {
+                    return new google.maps.Marker({
+                        map: map
+                    });
+                },
+                findAddress: function () {
+                    var map = this.vueGMap;
+                    this.vueGeocoder = new google.maps.Geocoder();
+                    var marker = this.getMarker(map);
+                    this.vueGeocoder.geocode({'address': this.address + ' ' + this.cityName + ' ' + this.countryName}, function (results, status) {
+                        if (status === 'OK') {
+                            marker.setPosition(results[0].geometry.location);
+                            map.setCenter(results[0].geometry.location);
+                            document.getElementById('lat').value = results[0].geometry.location.lat();
+                            document.getElementById('long').value = results[0].geometry.location.lng();
+                        }
+                    });
+                    google.maps.event.addListener(map, 'click', function (args) {
+                        marker.setPosition(args.latLng);
+                        document.getElementById('lat').value = args.latLng.lat();
+                        document.getElementById('long').value = args.latLng.lng();
+                    });
                 }
             }
-        }
-    })
-</script>
+        })
+    </script>
 @endpush

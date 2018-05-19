@@ -28,6 +28,11 @@ class LocationServiceProvider extends ServiceProvider
     {
         $this->registerBindings();
 
+        $this->app->extend('asgard.ModulesList', function($app) {
+            array_push($app, 'location');
+            return $app;
+        });
+
         $this->app['events']->listen(
             BuildingSidebar::class,
             $this->getSidebarClassForModule('Location', RegisterLocationSidebar::class)
@@ -36,6 +41,8 @@ class LocationServiceProvider extends ServiceProvider
         $this->app->singleton('locations', function(){
            return app(LocationRepository::class)->all()->sortBy('ordering');
         });
+
+        \Widget::register('locationFind', '\Modules\Location\Widgets\LocationWidgets@location');
     }
 
     public function boot()
