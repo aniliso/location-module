@@ -42,7 +42,8 @@ class LocationServiceProvider extends ServiceProvider
            return app(LocationRepository::class)->all()->sortBy('ordering');
         });
 
-        \Widget::register('locationFind', '\Modules\Location\Widgets\LocationWidgets@location');
+        \Widget::register('location', '\Modules\Location\Widgets\LocationWidgets@location');
+        \Widget::register('locations', '\Modules\Location\Widgets\LocationWidgets@locations');
     }
 
     public function boot()

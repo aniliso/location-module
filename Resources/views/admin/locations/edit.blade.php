@@ -52,7 +52,7 @@
                                 {!! Form::label("city_id", trans('location::locations.form.city_id')) !!}
                                 <select name="city_id" class="form-control">
                                     <option value="" selected>{!! trans("location::locations.form.select city") !!}</option>
-                                    <option v-for="(item, key) in cities" :value="key" :selected="cityId == key">@{{ item}}</option>
+                                    <option v-for="(item, key) in cities" :value="key" :selected="city_id == key">@{{ item}}</option>
                                 </select>
                                 {!! $errors->first("city_id", '<span class="help-block">:message</span>') !!}
                             </div>
@@ -60,9 +60,9 @@
                         <div class="col-md-3">
                             <div class="form-group{{ $errors->has("country_id") ? ' has-error' : '' }}">
                                 {!! Form::label("country_id", trans('location::locations.form.country_id')) !!}
-                                <select name="country_id" class="form-control" v-on:change="onChange" v-model="countryId">
+                                <select name="country_id" class="form-control" v-on:change="onChange" v-model="country_id">
                                     <option value="" selected>{!! trans("location::locations.form.select country") !!}</option>
-                                    <option v-for="(item, key) in countries" :value="key" :selected="countryId == key">@{{ item}}</option>
+                                    <option v-for="(item, key) in countries" :value="key" :selected="country_id == key">@{{ item}}</option>
                                 </select>
                                 {!! $errors->first("country_id", '<span class="help-block">:message</span>') !!}
                             </div>
@@ -152,8 +152,8 @@
                 loading: false,
                 countries: ['turkey'],
                 cities: [],
-                countryId: 1,
-                cityId: 6,
+                country_id: {{ old('country_id', $location->country_id) }},
+                city_id: {{ old('city_id', $location->city_id) }},
                 address: '{{ old('address', $location->address) }}',
                 cityName: '',
                 countryName: '',
@@ -162,7 +162,7 @@
             },
             created() {
                 this.getCountries();
-                this.getCities(this.countryId);
+                this.getCities(this.country_id);
             },
             mounted() {
                 let t = setInterval(() => {
@@ -179,7 +179,7 @@
                     axios.get("{{ route('api.localization.countries') }}")
                         .then(response => {
                             this.countries = response.data.data;
-                            this.countryName = this.countries[this.countryId];
+                            this.countryName = this.countries[this.country_id];
                             this.findAddress();
                         })
                         .catch(function (error) {
@@ -191,7 +191,7 @@
                     axios.get("{{ route('api.localization.cities') }}?id=" + city_id)
                         .then(response => {
                             this.cities = response.data.data;
-                            this.cityName = this.cities[this.cityId];
+                            this.cityName = this.cities[this.country_id];
                             this.findAddress();
                         })
                         .catch(function (error) {
@@ -199,8 +199,8 @@
                         });
                 },
                 onChange: function () {
-                    if (this.countryId) {
-                        this.getCities(this.countryId);
+                    if (this.country_id) {
+                        this.getCities(this.country_id);
                     } else {
                         this.cities = [];
                     }

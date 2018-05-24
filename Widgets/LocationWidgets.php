@@ -20,4 +20,10 @@ class LocationWidgets
         $location = $this->location->findBySlug($slug);
         return view('location::widgets.'.$view, compact('location'));
     }
+
+    public function locations($view='', $limit=20, $except='')
+    {
+        $locations = $this->location->all()->take($limit)->except($except);
+        return view('location::widgets.'.$view, compact('locations'));
+    }
 }
