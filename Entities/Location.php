@@ -15,7 +15,7 @@ class Location extends Model
 
     protected $table = 'location__locations';
     public $translatedAttributes = ['name', 'slug'];
-    protected $fillable = ['country_id', 'city_id', 'name', 'slug', 'address', 'lat', 'long', 'phone1', 'phone2', 'fax', 'email', 'postcode', 'ordering', 'status'];
+    protected $fillable = ['country_id', 'city_id', 'name', 'slug', 'address', 'lat', 'long', 'phone1', 'phone2', 'mobile', 'fax', 'email', 'postcode', 'ordering', 'status'];
     protected $presenter = LocationPresenter::class;
 
     public function city()
