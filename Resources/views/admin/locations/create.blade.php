@@ -17,7 +17,7 @@
 @section('content')
     {!! Form::open(['route' => ['admin.location.location.store'], 'method' => 'post']) !!}
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-10">
             <div class="nav-tabs-custom">
                 @include('partials.form-tab-headers')
                 <div class="tab-content">
@@ -84,19 +84,9 @@
                             class="fa fa-times"></i> {{ trans('core::core.button.cancel') }}</a>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="box">
                 <div class="box-body">
-                    {!! Form::normalInput('phone1', trans('location::locations.form.phone1'), $errors) !!}
-
-                    {!! Form::normalInput('phone2', trans('location::locations.form.phone2'), $errors) !!}
-
-                    {!! Form::normalInput('fax', trans('location::locations.form.fax'), $errors) !!}
-
-                    {!! Form::normalInput('mobile', trans('location::locations.form.mobile'), $errors) !!}
-
-                    {!! Form::normalInput('email', trans('location::locations.form.email'), $errors) !!}
-
                     {!! Form::normalInput('ordering', trans('location::locations.form.ordering'), $errors) !!}
 
                     {!! Form::normalCheckbox('status', trans('location::locations.form.status'), $errors) !!}

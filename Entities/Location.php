@@ -14,7 +14,7 @@ class Location extends Model
     use Translatable, PresentableTrait;
 
     protected $table = 'location__locations';
-    public $translatedAttributes = ['name', 'slug'];
+    public $translatedAttributes = ['name', 'slug', 'phone1', 'phone2', 'mobile', 'fax', 'email'];
     protected $fillable = ['country_id', 'city_id', 'name', 'slug', 'address', 'lat', 'long', 'phone1', 'phone2', 'mobile', 'fax', 'email', 'postcode', 'ordering', 'status'];
     protected $presenter = LocationPresenter::class;
 
