@@ -17,13 +17,18 @@ class LocationWidgets
 
     public function location($slug='', $view='location')
     {
-        $location = $this->location->findBySlug($slug);
-        return view('location::widgets.'.$view, compact('location'));
+        if($location = $this->location->findBySlug($slug)) {
+            return view('location::widgets.'.$view, compact('location'));
+        }
+        return "";
     }
 
     public function locations($view='', $limit=20, $except='')
     {
         $locations = $this->location->all()->take($limit)->except($except);
-        return view('location::widgets.'.$view, compact('locations'));
+        if($locations->count()>0) {
+            return view('location::widgets.' . $view, compact('locations'));
+        }
+        return "";
     }
 }
