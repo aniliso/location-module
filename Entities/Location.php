@@ -8,13 +8,14 @@ use Laracasts\Presenter\PresentableTrait;
 use Modules\Localization\Entities\City;
 use Modules\Localization\Entities\Country;
 use Modules\Location\Presenters\LocationPresenter;
+use Modules\Media\Support\Traits\MediaRelation;
 
 class Location extends Model
 {
-    use Translatable, PresentableTrait;
+    use Translatable, PresentableTrait, MediaRelation;
 
     protected $table = 'location__locations';
-    public $translatedAttributes = ['name', 'slug', 'phone1', 'phone2', 'mobile', 'fax', 'email'];
+    public $translatedAttributes = ['name', 'slug'];
     protected $fillable = ['country_id', 'city_id', 'name', 'slug', 'address', 'lat', 'long', 'phone1', 'phone2', 'mobile', 'fax', 'email', 'postcode', 'ordering', 'status'];
     protected $presenter = LocationPresenter::class;
 
