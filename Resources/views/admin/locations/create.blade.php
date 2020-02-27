@@ -87,6 +87,8 @@
         <div class="col-md-2">
             <div class="box">
                 <div class="box-body">
+                    @mediaSingle('locationImage', null, null, "Resim")
+
                     {!! Form::normalInput('ordering', trans('location::locations.form.ordering'), $errors) !!}
 
                     {!! Form::normalCheckbox('status', trans('location::locations.form.status'), $errors) !!}
