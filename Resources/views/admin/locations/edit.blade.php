@@ -50,7 +50,7 @@
                         <div class="col-md-3">
                             <div class="form-group{{ $errors->has("city_id") ? ' has-error' : '' }}">
                                 {!! Form::label("city_id", trans('location::locations.form.city_id')) !!}
-                                <select name="city_id" class="form-control">
+                                <select name="city_id" class="form-control" v-model="city_id" v-on:change="onChange">
                                     <option value="" selected>{!! trans("location::locations.form.select city") !!}</option>
                                     <option v-for="(item, key) in cities" :value="key" :selected="city_id == key">@{{ item}}</option>
                                 </select>
@@ -163,7 +163,7 @@
                     }
                 }, 500);
                 this.createGoogleMaps()
-                    .then(this.initGoogleMaps, this.googleMapsFailedToLoad);
+                    .then(this.initGoogleMaps);
             },
             methods: {
                 getCountries: function () {
@@ -172,19 +172,17 @@
                         .then(response => {
                             this.countries = response.data.data;
                             this.countryName = this.countries[this.country_id];
-                            this.findAddress();
                         })
                         .catch(function (error) {
                             console.log(error);
                         });
                     this.loading = false;
                 },
-                getCities: function (city_id) {
-                    axios.get("{{ route('api.localization.cities') }}?id=" + city_id)
+                getCities: function (country_id) {
+                    axios.get("{{ route('api.localization.cities') }}?id=" + country_id)
                         .then(response => {
                             this.cities = response.data.data;
-                            this.cityName = this.cities[this.country_id];
-                            this.findAddress();
+                            this.cityName = this.cities[this.city_id];
                         })
                         .catch(function (error) {
                             console.log(error);

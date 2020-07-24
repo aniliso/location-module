@@ -184,8 +184,8 @@
                         });
                     this.loading = false;
                 },
-                getCities: function (city_id) {
-                    axios.get("{{ route('api.localization.cities') }}?id=" + city_id)
+                getCities: function (country_id) {
+                    axios.get("{{ route('api.localization.cities') }}?id=" + country_id)
                         .then(response => {
                             this.cities = response.data.data;
                             this.cityName = this.cities[this.cityId];
