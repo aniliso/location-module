@@ -141,6 +141,7 @@
         new Vue({
             el: '#app',
             data: {
+                edit: true,
                 loading: false,
                 countries: ['turkey'],
                 cities: [],
@@ -164,6 +165,7 @@
                 }, 500);
                 this.createGoogleMaps()
                     .then(this.initGoogleMaps);
+
             },
             methods: {
                 getCountries: function () {
@@ -218,11 +220,14 @@
                         map: map
                     });
                 },
-                findAddress: function () {
+                findAddress: function (edit=false) {
                     var map = this.vueGMap;
                     this.vueGeocoder = new google.maps.Geocoder();
                     var marker = this.getMarker(map);
-                    this.vueGeocoder.geocode({'address': this.address + ' ' + this.cityName + ' ' + this.countryName}, function (results, status) {
+
+                    var address  = this.edit ? {'location': { lat: parseFloat(this.lat), lng: parseFloat(this.long) }} : {'address': this.address + ' ' + this.cityName + ' ' + this.countryName};
+
+                    this.vueGeocoder.geocode(address, function (results, status) {
                         if (status === 'OK') {
                             marker.setPosition(results[0].geometry.location);
                             map.setCenter(results[0].geometry.location);
@@ -235,6 +240,8 @@
                         document.getElementById('lat').value = args.latLng.lat();
                         document.getElementById('long').value = args.latLng.lng();
                     });
+
+                    this.edit = false;
                 }
             }
         })

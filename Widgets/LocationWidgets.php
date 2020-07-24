@@ -25,7 +25,7 @@ class LocationWidgets
 
     public function locations($view='', $limit=20, $except='')
     {
-        $locations = $this->location->all()->take($limit)->except($except);
+        $locations = $this->location->all()->where('status', 1)->sortBy('ordering')->take($limit)->except($except);
         if($locations->count()>0) {
             return view('location::widgets.' . $view, compact('locations'));
         }
