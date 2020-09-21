@@ -15,6 +15,7 @@ return [
     ],
     'table'            => [
         'address information' => 'Adres Bilgileri',
+        'amenities'           => 'Olanaklar'
     ],
     'form'             => [
         'name'           => 'Lokasyon Adı',

@@ -4,6 +4,7 @@ namespace Modules\Location\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Modules\Location\Entities\Amenity;
 use Modules\Location\Entities\Location;
 use Modules\Location\Http\Requests\CreateLocationRequest;
 use Modules\Location\Http\Requests\UpdateLocationRequest;

@@ -30,6 +30,21 @@
                     @endforeach
                 </div>
             </div>
+            @if(\Modules\Location\Entities\Amenity::hasAmenity())
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">{{ trans('location::locations.table.amenities') }}</h3>
+                    </div>
+                    <div class="box-body">
+                        @foreach(\Modules\Location\Entities\Amenity::getAmenitiesToArray() as $key => $amenity)
+                            <label name="{{ $amenity }}" style="margin-right: 10px;">
+                                {!! Form::checkbox("settings[amenities][{$amenity}]", 1, null, ['class'=>'flat-blue']) !!}
+                                {{ $amenity }}
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
             <div class="box" id="app">
                 <div class="box-header">
                     <h3 class="box-title">{{ trans('location::locations.table.address information') }}</h3>
